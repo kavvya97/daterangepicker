@@ -83,6 +83,7 @@ $(document).ready(function() {
           fromLabel: 'From',
           toLabel: 'To',
           customRangeLabel: 'Custom',
+          daysSelectedLabel: 'Selected days',
           weekLabel: 'W',
           daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
           monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -98,6 +99,9 @@ $(document).ready(function() {
 
       if (!$('#showCustomRangeLabel').is(':checked'))
         options.showCustomRangeLabel = false;
+
+      if ($('#showSelectedDays').is(':checked'))
+        options.showSelectedDays = true;
 
       if ($('#alwaysShowCalendars').is(':checked'))
         options.alwaysShowCalendars = true;

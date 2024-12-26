@@ -54,6 +54,7 @@
         this.linkedCalendars = true;
         this.autoUpdateInput = true;
         this.alwaysShowCalendars = false;
+        this.showSelectedDays = false;
         this.ranges = {};
 
         this.opens = 'right';
@@ -76,6 +77,7 @@
             cancelLabel: 'Cancel',
             weekLabel: 'W',
             customRangeLabel: 'Custom Range',
+            daysSelectedLabel: 'days selected',
             daysOfWeek: moment.weekdaysMin(),
             monthNames: moment.monthsShort(),
             firstDay: moment.localeData().firstDayOfWeek()
@@ -110,6 +112,7 @@
                     '<div class="calendar-time"></div>' +
                 '</div>' +
                 '<div class="drp-buttons">' +
+                    '<span class="drp-selected-dates"></span>' +
                     '<span class="drp-selected"></span>' +
                     '<button class="cancelBtn" type="button"></button>' +
                     '<button class="applyBtn" disabled="disabled" type="button"></button> ' +
@@ -158,6 +161,12 @@
                 elem.innerHTML = options.locale.customRangeLabel;
                 var rangeHtml = elem.value;
                 this.locale.customRangeLabel = rangeHtml;
+            }
+            if (typeof options.locale.daysSelectedLabel === 'string') {
+                var elem = document.createElement('textarea');
+                elem.innerHTML = options.locale.daysSelectedLabel;
+                var rangeHtml = elem.value;
+                this.locale.daysSelectedLabel = rangeHtml;
             }
         }
         this.container.addClass(this.locale.direction);
@@ -262,6 +271,9 @@
 
         if (typeof options.autoApply === 'boolean')
             this.autoApply = options.autoApply;
+
+        if (typeof options.showSelectedDays === 'boolean')
+            this.showSelectedDays = options.showSelectedDays
 
         if (typeof options.autoUpdateInput === 'boolean')
             this.autoUpdateInput = options.autoUpdateInput;
@@ -373,6 +385,9 @@
         //can't be used together for now
         if (this.timePicker && this.autoApply)
             this.autoApply = false;
+
+        if (this.timePicker && this.showSelectedDays)
+            this.showSelectedDays = false;
 
         if (this.autoApply) {
             this.container.addClass('auto-apply');
@@ -506,11 +521,18 @@
             this.previousRightTime = this.endDate.clone();
 
             this.container.find('.drp-selected').html(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
+            if (this.showSelectedDays) {
+                this.container.find('.drp-selected-dates').html(this.getTotalSelectedDates.call(this) + ' ' + this.locale.daysSelectedLabel);
+            }
 
             if (!this.isShowing)
                 this.updateElement();
 
             this.updateMonthsInView();
+        },
+
+        getTotalSelectedDates: function() {
+            return this.endDate.diff(this.startDate, 'days') + 1
         },
 
         isInvalidDate: function() {
@@ -531,8 +553,12 @@
                     this.container.find('.right .calendar-time select').prop('disabled', false).removeClass('disabled');
                 }
             }
-            if (this.endDate)
+            if (this.endDate) {
                 this.container.find('.drp-selected').html(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
+                if (this.showSelectedDays) {
+                    this.container.find('.drp-selected-dates').html(this.getTotalSelectedDates.call(this) + ' ' + this.locale.daysSelectedLabel);
+                }
+            }
             this.updateMonthsInView();
             this.updateCalendars();
             this.updateFormInputs();

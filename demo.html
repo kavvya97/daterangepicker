@@ -162,6 +162,12 @@
                 </label>
               </div>
 
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="showSelectedDays"> showSelectedDays
+                </label>
+              </div>
+
               <div class="form-group">
                 <label for="opens">opens</label>
                 <select id="opens" class="form-control">
@@ -311,6 +317,7 @@
               fromLabel: 'From',
               toLabel: 'To',
               customRangeLabel: 'Custom',
+              daysSelectedLabel: 'selected days',
               daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
               monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
               firstDay: 1
@@ -327,6 +334,9 @@
 
           if (!$('#showCustomRangeLabel').is(':checked'))
             options.showCustomRangeLabel = false;
+
+          if ($('#showSelectedDays').is(':checked'))
+            options.showSelectedDays = true;
 
           if ($('#alwaysShowCalendars').is(':checked'))
             options.alwaysShowCalendars = true;
